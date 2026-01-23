@@ -1,0 +1,2 @@
+# Stellar-luminosity
+Linear and Polynomial Models for Regression
