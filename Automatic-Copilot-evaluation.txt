@@ -1,0 +1,219 @@
+========================================================
+AUTOMATIC COPILOT EVALUATION – TA GRADING REPORT
+Course: Digital Transformation and Enterprise Architecture
+Assignment: Stellar Luminosity – Linear & Polynomial Regression
+Student: Andrés Felipe Calderón Ramírez
+========================================================
+
+------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------
+The repository is well-structured and satisfies the major mandatory deliverables
+of the assignment. Both notebooks are present, datasets are defined inline, and
+only the allowed libraries (NumPy and Matplotlib) are used. Notebook 1 covers
+linear regression end-to-end, including a cost surface, non-vectorized and
+vectorized gradient descent, convergence plots, and three learning-rate
+experiments. Notebook 2 covers polynomial regression with two features,
+feature engineering, vectorized gradients, a feature selection experiment
+(M1/M2/M3), an interaction-coefficient sweep, and an inference demo.
+The primary technical deficiencies are: (1) a bug in the vectorized gradient
+function in Notebook 1 where `L` is used instead of `M` for predictions,
+and the vectorized gradient function is never actually called by
+gradient_descent_vectorized (it falls back to the non-vectorized version);
+(2) copy-paste axis labels in Notebook 2 ("True price (thousands)") betraying
+a housing-dataset template; (3) the inference demo in Notebook 2 lacks an
+explicit written interpretation; and (4) the README's local-vs-cloud
+comparison is implicit (a list of steps) rather than a structured discussion
+of differences. Conceptual understanding is demonstrated adequately in the
+Markdown commentary throughout both notebooks.
+
+------------------------------------------------------------
+GRADING BREAKDOWN (0.0 – 5.0 scale)
+------------------------------------------------------------
+
+1. Repository Structure & Compliance ............ 0.5 / 0.5
+   - README.md present                                      ✓
+   - Two notebooks covering Part I and Part II              ✓
+   - Datasets defined inside notebooks                      ✓
+   - Only allowed libraries (NumPy, Matplotlib, mpl_toolkits) ✓
+   Deductions: none.
+
+2. Notebook 1 – Linear Regression (One Feature) . 1.6 / 2.0
+   - Dataset visualization + interpretation                 ✓
+   - Hypothesis function and MSE implementation             ✓
+   - Cost surface (3D grid, plot, explanation) [MANDATORY]  ✓
+   - Correct gradient derivation                            ✓
+   - Non-vectorized gradient descent (explicit loops)       ✓
+   - Vectorized gradient descent                            Partial
+   - Convergence plot and discussion [MANDATORY]            ✓
+   - ≥3 learning-rate experiments [MANDATORY]               ✓  (α = 0.01, 0.0001, 0.05, 0.009)
+   - Final fit plot for each learning rate                  ✓
+   - Error discussion and limits of linearity               ✓
+   - Conceptual meaning of w                                ✓
+
+   Deductions (-0.4):
+   • compute_gradients_vectorized (Cell 19) computes `y_hat = w * L + b`
+     instead of `y_hat = w * M + b`. The prediction uses the target vector
+     as the feature, which is incorrect.
+   • gradient_descent_vectorized never calls compute_gradients_vectorized;
+     it calls the non-vectorized compute_gradients. The vectorized path is
+     therefore untested and broken.
+   • No side-by-side comparative plot of the three learning rates in one
+     figure; each is shown in isolation, making the comparison harder to read.
+
+3. Notebook 2 – Polynomial Regression (Two Features) 1.65 / 2.0
+   - Visualization with temperature colour encoding         ✓
+   - Feature engineering [M, T, M², M·T]                   ✓
+   - Vectorized loss and gradients (correct formulas)       ✓
+   - Training and convergence plot (linear + log scale)     ✓
+   - Feature selection experiment M1/M2/M3 [MANDATORY]     ✓
+   - Interaction cost analysis (w_MT sweep) [MANDATORY]     ✓
+   - Inference example [MANDATORY]                          ✓
+
+   Deductions (-0.35):
+   • Axis labels in the Predicted-vs-True scatter plots read
+     "True price (thousands)" / "Predicted price (thousands)" – a clear
+     copy-paste artefact from a housing dataset; labels should reference
+     stellar luminosity.
+   • The inference demo (Cell 34) prints a numeric value but provides no
+     written interpretation of what the predicted luminosity means in the
+     astrophysical context.
+   • The M1/M2/M3 comparison is done by printing final costs, but no
+     convergence curves are overlaid for a visual comparison of the three
+     models.
+
+4. Cloud Execution Evidence (SageMaker) ......... 0.4 / 0.5
+   - Description of SageMaker steps                        ✓
+   - Screenshots of notebooks running in SageMaker         ✓  (img/proof.png)
+   - Screenshots showing successful execution and plots    ✓  (extensive img/ folder)
+   - Local vs cloud comparison                             Partial
+
+   Deductions (-0.1):
+   • The README provides a step-by-step execution log but does not contain
+     an explicit paragraph comparing local execution vs SageMaker
+     (e.g., resource availability, managed environment, reproducibility).
+
+------------------------------------------------------------
+FINAL GRADE
+------------------------------------------------------------
+  Repository structure & compliance : 0.50 / 0.50
+  Notebook 1 – Linear regression    : 1.60 / 2.00
+  Notebook 2 – Polynomial regression: 1.65 / 2.00
+  Cloud execution evidence           : 0.40 / 0.50
+  ────────────────────────────────────────────────
+  Total                              : 4.15 / 5.00
+
+Final grade: 4.15 / 5.0
+Result: PASS (≥ 3.0)
+
+------------------------------------------------------------
+STRENGTHS
+------------------------------------------------------------
+• Complete coverage of all three MANDATORY items in Notebook 1 (cost
+  surface, convergence plot, ≥3 learning-rate experiments).
+• Complete coverage of all three MANDATORY items in Notebook 2 (M1/M2/M3
+  comparison, w_MT interaction sweep, inference demo).
+• Feature engineering is correct: [M, T, M², M·T] is properly built with
+  np.column_stack and used throughout Notebook 2.
+• Vectorized gradients in Notebook 2 use proper matrix operations
+  (X.T @ error) with clear docstrings.
+• Extensive SageMaker evidence with numerous screenshots covering both
+  notebooks and multiple plots.
+• Markdown commentary throughout both notebooks provides readable explanations
+  of each step.
+• Conceptual questions (meaning of w, why linearity fails for stellar
+  luminosity) are answered correctly and concisely.
+
+------------------------------------------------------------
+ISSUES & MISSING ELEMENTS
+------------------------------------------------------------
+• [Notebook 1] Bug: compute_gradients_vectorized uses `w * L + b` instead
+  of `w * M + b`; the function is also never actually called by
+  gradient_descent_vectorized, so the vectorized implementation is not
+  exercised.
+• [Notebook 1] No comparative convergence plot overlaying all three
+  learning rates in a single figure.
+• [Notebook 2] Scatter-plot axis labels reference "price (thousands)"
+  rather than luminosity.
+• [Notebook 2] Inference demo lacks a written interpretation of the
+  predicted luminosity value in astrophysical terms.
+• [Notebook 2] M1/M2/M3 convergence curves are not plotted together for
+  a direct visual comparison.
+• [README] Local vs cloud comparison is missing as a structured discussion;
+  only execution steps are listed.
+
+------------------------------------------------------------
+TA FEEDBACK TO STUDENT
+------------------------------------------------------------
+Overall this is a solid submission that demonstrates a genuine grasp of the
+optimization pipeline from first principles. You correctly implement gradient
+descent, build polynomial features, run the mandatory experiments, and provide
+good commentary. There are two things to fix and two to improve:
+
+Fix:
+1. In Notebook 1, Cell 19: change `y_hat = w * L + b` to `y_hat = w * M + b`.
+   Then make sure gradient_descent_vectorized actually calls
+   compute_gradients_vectorized instead of the loop-based version.
+2. In Notebook 2, update the scatter-plot axis labels from "price (thousands)"
+   to "Luminosity (L_sun)" or similar.
+
+Improve:
+3. Add a short paragraph after the inference demo explaining what the
+   predicted luminosity value means (e.g., compare it to the Sun, nearby
+   data points, or the physics of a 1.3 M☉ star).
+4. In the README, add a brief comparison section contrasting running the
+   notebooks locally vs. in SageMaker (environment setup, reproducibility,
+   compute resources, sharing).
+
+These are minor but important details for production-quality ML work. The
+mathematical foundations are sound and the experimental methodology is good.
+
+------------------------------------------------------------
+AI-GENERATION ASSESSMENT (NON-GRADING, INFORMATIVE ONLY)
+------------------------------------------------------------
+
+A. Qualitative Assessment
+--------------------------
+Indicators consistent with AI assistance:
+  - Docstrings in Notebook 2 are unusually complete and follow a uniform
+    NumPy docstring style, contrasting with the shorter, plainer comments
+    in Notebook 1.
+  - Some Markdown explanations are generic and could apply to any regression
+    problem (e.g., "the cost function is decreasing smoothly").
+  - The copy-paste label artefact ("True price (thousands)") suggests a
+    template was reused without careful review, a pattern common when
+    adapting AI-generated boilerplate.
+  - The interaction-sweep cell (Cell 31, Notebook 2) is concise, correct,
+    and stylistically consistent with generated code.
+
+Indicators consistent with human authorship:
+  - The vectorized gradient bug (w * L + b) is a genuine coding mistake
+    that would be unusual in purely AI-generated code.
+  - The choice of three specific learning rates (0.0001, 0.05, 0.009) and
+    the naming scheme (history_00001, history_005, history_009) are
+    idiosyncratic and suggest manual iteration.
+  - Markdown text includes mild grammatical variations and informal phrasing
+    ("With the pass of the time"), consistent with non-native-English human
+    writing.
+  - Some explanations are brief and field-specific (stellar mass/luminosity
+    relation) without excessive elaboration.
+
+B. Quantitative Estimate
+--------------------------
+  Code:              ~45% AI involvement
+  Explanations/Markdown: ~35% AI involvement
+  README:            ~20% AI involvement
+
+C. Commentary
+--------------------------
+The codebase shows a mixed profile. Notebook 2, particularly its predict,
+compute_cost, and compute_gradient functions, reads as likely AI-scaffolded
+(clean structure, full docstrings, matrix-algebra idioms). Notebook 1 appears
+more manually written, evidenced by the naming inconsistencies, the bug in the
+vectorized function, and the incremental, exploratory structure (redefining
+the same function multiple times with different history variable names). The
+README reads as predominantly student-written, with step-by-step procedural
+language and informal phrasing. The overall level of understanding demonstrated
+is consistent with graduate coursework, regardless of tooling used.
+
+"This assessment is observational and does not imply misconduct."
